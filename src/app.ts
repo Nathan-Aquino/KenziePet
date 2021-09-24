@@ -3,7 +3,12 @@ import express from "express";
 import { createConnection } from "typeorm";
 
 const app = express();
+app.use(express.json());
 const PORT = 3000;
+
+import { initializerRoutes } from "./api/routers";
+
+initializerRoutes(app);
 
 import config from "./config/database";
 
