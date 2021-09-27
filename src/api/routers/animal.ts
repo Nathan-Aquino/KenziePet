@@ -1,14 +1,19 @@
 import { Express, Router } from "express";
-import { passportStrategy } from "../middleware/jwtStrategy";
 import passport from "passport";
-//controllers
+import { create } from "../controllers/animal";
+import { passportStrategy } from "../middleware/jwtStrategy";
+import { createChangePermission } from "../middleware/permissions";
+import { validate } from "../middleware/validators";
+import { animalValidator } from "../middleware/validators/animal";
 
 export const initializerAnimalRoutes = (app: Express) => {
-  passportStrategy(passport);
+  passport.use(passportStrategy());
+
   const route = Router();
   route.use(passport.authenticate("jwt", { session: false }));
 
   //rotas
+  route.post("/", animalValidator(), validate, createChangePermission, create);
 
   app.use("/api/animal", route);
 };
